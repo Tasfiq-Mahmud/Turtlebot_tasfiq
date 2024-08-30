@@ -13,9 +13,12 @@ class processCommand:
 
     def clbk(self,cmnd):
         rospy.loginfo('received command...')
-        dir, speed = cmnd.data.split(" ")
-        dir = dir.lower()
-        speed = float(speed)/10
+        try:
+            dir, speed = cmnd.data.split(" ")
+            dir = dir.lower()
+            speed = float(speed)/10
+        except:
+            dir,speed='',0
         if dir=='forward':
             self.vel.linear.x = speed
         elif dir=='backward':
