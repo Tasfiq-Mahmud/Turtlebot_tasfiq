@@ -9,7 +9,6 @@ class processCommand:
         rospy.init_node('command_processer',anonymous=True)
         rospy.Subscriber('/command',String,self.clbk)
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        self.vel = Twist()
 
     def clbk(self,cmnd):
         rospy.loginfo('received command...')
@@ -19,18 +18,19 @@ class processCommand:
             speed = float(speed)/10
         except:
             dir,speed='',0
+        vel = Twist()
         if dir=='forward':
-            self.vel.linear.x = speed
+            vel.linear.x = speed
         elif dir=='backward':
-            self.vel.linear.x = -speed
+            vel.linear.x = -speed
         elif dir=='right':
-            self.vel.angular.z = -speed
+            vel.angular.z = -speed
         elif dir=='left':
-            self.vel.angular.z = speed
+            vel.angular.z = speed
         else:
-            self.vel.linear.x = 0
-            self.vel.angular.z = 0
-        self.pub.publish(self.vel)
+            vel.linear.x = 0
+            vel.angular.z = 0
+        self.pub.publish(vel)
         
         
 if __name__=='__main__':
